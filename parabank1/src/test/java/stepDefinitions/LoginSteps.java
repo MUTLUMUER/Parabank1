@@ -31,7 +31,7 @@ public class LoginSteps {
 
         for (int i = 0; i < listTxtYazi.size(); i++) {
             WebElement txtBoxWebElemnt= dc.getWebElement(listTxtYazi.get(i).get(0));
-            dc.mySendKeys(txtBoxWebElemnt, listTxtYazi.get(i).get(1));
+            dc.mySendKeys(txtBoxWebElemnt,  listTxtYazi.get(i).get(1));
         }
     }
     @Then("User shouldNot login successfully")
