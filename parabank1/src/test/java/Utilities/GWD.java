@@ -2,51 +2,46 @@ package Utilities;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.time.Duration;
 import java.util.Locale;
 
-public class GWD {
-    private static ThreadLocal<WebDriver> threadDriver=new ThreadLocal<>();
-    public static ThreadLocal<String> threadBrowserName=new ThreadLocal<>();
 
+public class GWD {
+
+    private static WebDriver driver;
 
     public static WebDriver getDriver(){
+
         Locale.setDefault(new Locale("EN"));
         System.setProperty("user.language", "EN");
 
-        if (threadBrowserName.get()==null)
-            threadBrowserName.set("chrome");
-
-        if (threadDriver.get()==null) {
-
-            switch (threadBrowserName.get()){
-                case "firefox":threadDriver.set(new FirefoxDriver());break;
-                case "edge":threadDriver.set(new EdgeDriver());break;
-                default:threadDriver.set(new ChromeDriver());break;
-            }
-            threadDriver.get().manage().window().maximize();
-            threadDriver.get().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        if (driver == null) { //1 kez oluştur
+            driver = new ChromeDriver();
+            driver.manage().window().maximize();
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         }
-        return threadDriver.get();
+
+        return driver;
     }
+
+
     public static void quitDriver(){
 
+        //test sonucu ekranı bir miktar beklesin diye
         try {
             Thread.sleep(5000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        if (threadDriver.get() !=null){
-            threadDriver.get().quit();
-
-            WebDriver driver=threadDriver.get();
+        //driver kapat
+        if (driver != null){ //driver var ise
+            driver.quit();
             driver=null;
-            threadDriver.set(driver);
         }
 
     }
+
+
 }
